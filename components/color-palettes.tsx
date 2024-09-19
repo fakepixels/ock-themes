@@ -39,6 +39,10 @@ const ColorPalette: React.FC<PaletteProps> = ({ colors, isDark }) => {
     })
   }
 
+  if (!colors) {
+    return <div>No colors available for this palette.</div>
+  }
+
   return (
     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
       {Object.entries(colors).map(([name, color]) => {
@@ -109,7 +113,35 @@ const palettes: Record<string, ColorPalette> = {
     bgSuccess: { light: '#bef264', dark: '#4d7c0f' },
     bgDefaultReverse: { light: '#030712', dark: '#f9fafb' },
   },
-  // ... (other palettes remain unchanged)
+  cyberpunk: {
+    textInverse: { light: '#000000', dark: '#ffffff' },
+    textForeground: { light: '#ffffff', dark: '#000000' },
+    textForegroundMuted: { light: '#b3b3b3', dark: '#4d4d4d' },
+    textError: { light: '#ff3366', dark: '#ff6699' },
+    textPrimary: { light: '#00ff9f', dark: '#00cc7f' },
+    textSuccess: { light: '#00ff9f', dark: '#00cc7f' },
+    textWarning: { light: '#ffff00', dark: '#cccc00' },
+    textDisabled: { light: '#666666', dark: '#999999' },
+    bgDefault: { light: '#0a0a0a', dark: '#1a1a1a' },
+    bgDefaultHover: { light: '#1a1a1a', dark: '#2a2a2a' },
+    bgDefaultActive: { light: '#2a2a2a', dark: '#3a3a3a' },
+    bgAlternate: { light: '#1a1a1a', dark: '#2a2a2a' },
+    bgAlternateHover: { light: '#2a2a2a', dark: '#3a3a3a' },
+    bgAlternateActive: { light: '#3a3a3a', dark: '#4a4a4a' },
+    bgInverse: { light: '#ffffff', dark: '#000000' },
+    bgInverseHover: { light: '#f0f0f0', dark: '#1a1a1a' },
+    bgInverseActive: { light: '#e0e0e0', dark: '#2a2a2a' },
+    bgPrimary: { light: '#00ff9f', dark: '#00cc7f' },
+    bgPrimaryHover: { light: '#00e68f', dark: '#00b36f' },
+    bgPrimaryActive: { light: '#00cc7f', dark: '#00995f' },
+    bgSecondary: { light: '#00b8ff', dark: '#0099cc' },
+    bgSecondaryHover: { light: '#00a3e6', dark: '#0086b3' },
+    bgSecondaryActive: { light: '#008fcc', dark: '#007399' },
+    bgError: { light: '#ff3366', dark: '#ff6699' },
+    bgWarning: { light: '#ffff00', dark: '#cccc00' },
+    bgSuccess: { light: '#00ff9f', dark: '#00cc7f' },
+    bgDefaultReverse: { light: '#ffffff', dark: '#000000' },
+  },
 }
 
 const generateRandomColor = () => {
@@ -234,10 +266,7 @@ export function ColorPalettes() {
           <div className="flex justify-between items-center">
             <TabsList>
               <TabsTrigger value="onchainKitDefault">Default</TabsTrigger>
-              <TabsTrigger value="warm">Warm</TabsTrigger>
-              <TabsTrigger value="nature">Nature</TabsTrigger>
-              <TabsTrigger value="vibrant">Vibrant</TabsTrigger>
-              <TabsTrigger value="cool">Cool</TabsTrigger>
+              <TabsTrigger value="cyberpunk">Cyberpunk</TabsTrigger>
               <TabsTrigger value="lucky">Lucky</TabsTrigger>
             </TabsList>
             <Dialog>
@@ -274,17 +303,8 @@ export function ColorPalettes() {
           <TabsContent value="onchainKitDefault">
             <ColorPalette colors={palettes.onchainKitDefault} isDark={isDarkMode} />
           </TabsContent>
-          <TabsContent value="warm">
-            <ColorPalette colors={palettes.warm} isDark={isDarkMode} />
-          </TabsContent>
-          <TabsContent value="nature">
-            <ColorPalette colors={palettes.nature} isDark={isDarkMode} />
-          </TabsContent>
-          <TabsContent value="vibrant">
-            <ColorPalette colors={palettes.vibrant} isDark={isDarkMode} />
-          </TabsContent>
-          <TabsContent value="cool">
-            <ColorPalette colors={palettes.cool} isDark={isDarkMode} />
+          <TabsContent value="cyberpunk">
+            <ColorPalette colors={palettes.cyberpunk} isDark={isDarkMode} />
           </TabsContent>
           <TabsContent value="lucky">
             <div className="space-y-4">
