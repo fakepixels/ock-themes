@@ -195,15 +195,19 @@ export function ColorPalettes() {
   const generateThemeCSS = () => {
     const selectedPalette = currentPalette === 'lucky' ? luckyPalette : palettes[currentPalette as keyof typeof palettes]
     let css = '@layer base {\n  :root {\n'
-    Object.entries(selectedPalette).forEach(([key, value]) => {
-      const hsl = hexToHSL(value.light)
-      css += `    --${key}: ${hsl};\n`
-    })
+    if (selectedPalette) {
+      Object.entries(selectedPalette).forEach(([key, value]) => {
+        const hsl = hexToHSL(value.light)
+        css += `    --${key}: ${hsl};\n`
+      })
+    }
     css += '  }\n\n  .dark {\n'
-    Object.entries(selectedPalette).forEach(([key, value]) => {
-      const hsl = hexToHSL(value.dark)
-      css += `    --${key}: ${hsl};\n`
-    })
+    if (selectedPalette) {
+      Object.entries(selectedPalette).forEach(([key, value]) => {
+        const hsl = hexToHSL(value.dark)
+        css += `    --${key}: ${hsl};\n`
+      })
+    }
     css += '  }\n}'
     setGeneratedCSS(css)
   }
@@ -222,7 +226,8 @@ export function ColorPalettes() {
     
     const max = Math.max(r, g, b)
     const min = Math.min(r, g, b)
-    let h = 0, s, l = (max + min) / 2
+    let h = 0, s
+    const l = (max + min) / 2
     
     if (max === min) {
       h = s = 0 // achromatic
