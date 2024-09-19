@@ -247,6 +247,8 @@ const generateRandomPalette = (): ColorPalette => {
 export function ColorPalettes() {
   const [isDarkMode, setIsDarkMode] = useState(false)
   const [luckyPalette, setLuckyPalette] = useState<ColorPalette | null>(null)
+  const [currentPalette, setCurrentPalette] = useState<string>('onchainKitDefault')
+  const [copyMessage, setCopyMessage] = useState<string | null>(null)
 
   const toggleDarkMode = () => {
     setIsDarkMode((prev) => !prev)
@@ -264,6 +266,20 @@ export function ColorPalettes() {
     }
   }, [isDarkMode])
 
+  const copyThemeCSS = () => {
+    const selectedPalette = currentPalette === 'lucky' ? luckyPalette : palettes[currentPalette as keyof typeof palettes]
+    let css = ':root {\n'
+    Object.entries(selectedPalette).forEach(([key, value]) => {
+      css += `  --${key}: ${value[isDarkMode ? 'dark' : 'light']};\n`
+    })
+    css += '}'
+
+    navigator.clipboard.writeText(css).then(() => {
+      setCopyMessage("Theme copied!")
+      setTimeout(() => setCopyMessage(null), 3000) // Clear message after 3 seconds
+    })
+  }
+
   return (
     <div className="min-h-screen bg-white dark:bg-gray-900 text-black dark:text-white transition-colors duration-300">
       <div className="p-8">
@@ -275,15 +291,39 @@ export function ColorPalettes() {
             <Moon className="h-4 w-4" />
           </div>
         </div>
-        <Tabs defaultValue="onchainKitDefault" className="space-y-8">
-          <TabsList>
-            <TabsTrigger value="onchainKitDefault">OnchainKit default</TabsTrigger>
-            <TabsTrigger value="warm">Warm</TabsTrigger>
-            <TabsTrigger value="nature">Nature</TabsTrigger>
-            <TabsTrigger value="vibrant">Vibrant</TabsTrigger>
-            <TabsTrigger value="cool">Cool</TabsTrigger>
-            <TabsTrigger value="lucky">Lucky</TabsTrigger>
-          </TabsList>
+        <Tabs 
+          defaultValue="onchainKitDefault" 
+          className="space-y-8"
+          onValueChange={(value) => setCurrentPalette(value)}
+        >
+          <div className="flex justify-between items-center">
+            <TabsList>
+              <TabsTrigger value="onchainKitDefault">Default</TabsTrigger>
+              <TabsTrigger value="warm">Warm</TabsTrigger>
+              <TabsTrigger value="nature">Nature</TabsTrigger>
+              <TabsTrigger value="vibrant">Vibrant</TabsTrigger>
+              <TabsTrigger value="cool">Cool</TabsTrigger>
+              <TabsTrigger value="lucky">Lucky</TabsTrigger>
+            </TabsList>
+            <div className="flex items-center">
+              {copyMessage && (
+                <span className="text-green-500 mr-2">{copyMessage}</span>
+              )}
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button onClick={copyThemeCSS} variant="outline" size="sm">
+                      <Copy className="h-4 w-4 mr-2" />
+                      Copy theme
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    Copy CSS variables for the current theme
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            </div>
+          </div>
           <TabsContent value="onchainKitDefault">
             <ColorPalette colors={palettes.onchainKitDefault} isDark={isDarkMode} />
           </TabsContent>
